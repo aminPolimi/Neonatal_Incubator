@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1186</width>
+    <height>699</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>16</y>
+     <width>1181</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="grdLay1"/>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>1</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Incubator 1</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>177</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Incubator 2</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>192</y>
+     <width>1181</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="grdLay2"/>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>353</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Incubator 3</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>367</y>
+     <width>1181</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="grdLay3"/>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>530</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Incubator 4</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_4">
+   <property name="geometry">
+    <rect>
+     <x>2</x>
+     <y>544</y>
+     <width>1181</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="grdLay4"/>
+  </widget>
+  <zorder>gridLayoutWidget</zorder>
+  <zorder>gridLayoutWidget_2</zorder>
+  <zorder>gridLayoutWidget_3</zorder>
+  <zorder>gridLayoutWidget_4</zorder>
+  <zorder>label_4</zorder>
+  <zorder>label_3</zorder>
+  <zorder>label_2</zorder>
+  <zorder>label</zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
