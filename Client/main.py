@@ -10,7 +10,7 @@ def GetHumid_Temp():
         time.sleep(2)
 
 
-def sendData(ip, port, bufferSize):
+def SendData(ip, port, bufferSize):
     while 1:
         message = '{ "temp":'+str(Data.temp)+', "humid":'+str(Data.humid)+', "light":'+str(0)+'}'
         # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     serverIP = file.readline()
     # thHT = threading.Thread(target=GetHumid_Temp)
     # thHT.start()
-    thIP = threading.Thread(target=sendData(serverIP.replace("server=",""), 5005, 1024))
+    thIP = threading.Thread(target=SendData(serverIP.replace("server=",""), 5005, 1024))
 
 
 
