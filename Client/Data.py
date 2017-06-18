@@ -1,4 +1,5 @@
 class Data():
-    humid=0
-    temp=0
-    light=0
+    incID = 1 # incubator ID , always constant
+    humid=1
+    temp=1
+    lum=5
