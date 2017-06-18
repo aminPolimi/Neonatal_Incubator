@@ -22,10 +22,14 @@ def GetHumid_Temp():
             time.sleep(0.2)
 
 
+<<<<<<< HEAD
 def SendData():
     time.sleep(3)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((serverIP, 8002))
+=======
+def SendData(ip, port, bufferSize):
+>>>>>>> origin/master
     while 1:
         message = dict()
         message["incID"] = clsData.incID  # incubator ID
@@ -73,6 +77,7 @@ def WriteLog(message): # log data
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     GPIO.cleanup()
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
@@ -80,6 +85,13 @@ if __name__ == "__main__":
 
     thCamera = threading.Thread(target=RecordCamera)
     thCamera.start()
+=======
+    file = open("config","r")
+    serverIP = file.readline()
+    # thHT = threading.Thread(target=GetHumid_Temp)
+    # thHT.start()
+    thIP = threading.Thread(target=SendData(serverIP.replace("server=",""), 5005, 1024))
+>>>>>>> origin/master
 
     thHT = threading.Thread(target=GetHumid_Temp)
     thHT.start()
