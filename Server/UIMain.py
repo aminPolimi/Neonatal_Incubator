@@ -36,14 +36,18 @@ class clsMain(QtGui.QWidget):
     def updateData(self, jData):
         if jData["incID"] == 1:
             if len(Data.inc1["Temp"][1]) == Data.quLength:
-                del Data.inc1["Temp"][1][0] , Data.inc1["Humid"][1][0], Data.inc1["Lum"][1][0]
+                del Data.inc1["Temp"][1][0]
+                del Data.inc1["Humid"][1][0]
+                del Data.inc1["Lum"][1][0]
             else:
                 inc1Num = int(len(Data.inc1["Temp"][0]) + 1)
-                Data.inc1["Temp"][0].append(inc1Num) , Data.inc1["Humid"][0].append(inc1Num)
-                Data.inc1["Lum"].append(inc1Num)
+                Data.inc1["Temp"][0].append(inc1Num)
+                Data.inc1["Humid"][0].append(inc1Num)
+                Data.inc1["Lum"][0].append(inc1Num)
 
             Data.inc1["Temp"][1].append(int(jData["Temp"]))
-            Data.inc1["Humid"][1].append(int(jData["Humid"])), Data.inc1["Lum"][1].append(int(jData["Lum"]))
+            Data.inc1["Humid"][1].append(int(jData["Humid"]))
+            Data.inc1["Lum"][1].append(int(jData["Lum"]))
         # elif data["incID"] == 2:
         #     if len(Data.inc2["Temp"][1]) == Data.quLength:
         #         del Data.inc2["Temp"][1][0] , Data.inc2["Humid"][1][0], Data.inc2["Lum"][1][0]
@@ -125,9 +129,10 @@ class clsMain(QtGui.QWidget):
             self.ui.plotTemp1.plot(Data.inc1["Temp"][0], Data.inc1["Temp"][1])
             self.ui.plotHumid1.clear()
             self.ui.plotHumid1.plot(Data.inc1["Humid"][0], Data.inc1["Humid"][1])
-            # self.ui.plotLum1.clear()
-            # self.ui.plotLum1.plot(Data.inc1["Lum"][0], Data.inc1["Lum"][1])
-        #
+            self.ui.plotLum1.clear()
+            self.ui.plotLum1.plot(Data.inc1["Lum"][0], Data.inc1["Lum"][1])
+
+
         # self.ui.plotTemp2.clear()
         # self.ui.plotTemp2.plot(Data.inc2["Temp"][0], Data.inc2["Temp"][1])
         # self.ui.plotHumid2.clear()

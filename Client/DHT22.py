@@ -3,7 +3,7 @@ import atexit
 
 import pigpio
 
-class sensor:
+class Sensor:
    """
    A class to read relative humidity and temperature from the
    DHT22 sensor.  The sensor is also known as the AM2302.
@@ -241,16 +241,15 @@ def DHT22Data(pin):
 
    import time
    import pigpio
-   import DHT22
 
    pi = pigpio.pi()
-   s = DHT22.sensor(pi, pin, LED=16, power=8)
+   s = Sensor(pi, pin, LED=16, power=8)
    s.trigger()
    time.sleep(0.2)
    res = [s.humidity(),s.temperature(),s.bad_checksum(), s.short_message(), s.missing_message(),
          s.sensor_resets()]
    s.cancel()
-   #pi.stop()
+   pi.stop()
    return res
 
 
