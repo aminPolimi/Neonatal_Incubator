@@ -5,55 +5,65 @@ import socket, json
 import picamera
 import RPi.GPIO as GPIO
 from TSL2561 import tsl2561
-import io
+import paho.mqtt.client as mqtt
 
 file = open("config","r")
 serverIP = file.readline().replace('server=','')
 os.system("sudo pigpiod")
 
 clsData = Data()
+runApp = True
+
+client_socket = socket.socket()
+client_socket.connect((serverIP, 8001))
+connection = client_socket.makefile('wb')
 
 def GetHumid_Temp():
     res = (1,1)
-    while 1:
-        res = DHT22Data(10)
-        if int(res[0]) >= 0 and int(res[1] >=0 ):
-            [clsData.humid, clsData.temp] = int(res[0]),int(res[1])
-            # print "produce    Temp: "+str(clsData.temp) + " , Humidity: "+str(clsData.humid)
-        time.sleep(0.2)
-
+    while runApp:
+        try:
+            res = DHT22Data(10)
+            if int(res[0]) >= 0 and int(res[1]) >=0 :
+                [clsData.humid, clsData.temp] = int(res[0]),int(res[1])
+                # print "produce    Temp: "+str(clsData.temp) + " , Humidity: "+str(clsData.humid)
+        except:
+            print 'error producing sensor data'
+        finally:
+            time.sleep(0.2)
+#
 def GetLuminasity():
     lum = tsl2561()
-    while 1:
+    while runApp:
         clsData.lum = lum.getTSL()
         #print clsData.lum
         time.sleep(1)
-
+#
 def SendData():
     time.sleep(3)
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((serverIP, 8002))
-    while 1:
+    client = mqtt.Client()
+    client.connect(serverIP, 1883, 60)
+    # i=0
+    while runApp:
         message = dict()
         message["incID"] = clsData.incID  # incubator ID
         message["Humid"] = clsData.humid
         message["Temp"] = clsData.temp
         message["Lum"] = clsData.lum
+        # i=i+1
+        # message['id']= i
         try:
-            s.send(str(json.dumps(message)))
+            client.publish("incubator1", str(json.dumps(message)));
             #res = s.recv(16)
-            print "send      "+str(message)
+            print "send:  "+str(message)
         except:
-            print 'connection is closed'
+            pass
         WriteLog(str(message))
         time.sleep(2)
-    s.close()
+    client.disconnect();
 
 def RecordCamera():
-    client_socket = socket.socket()
-    client_socket.connect((serverIP, 8001))
-    connection = client_socket.makefile('wb')
-    while 1:
+
+    while runApp:
         try:
             with picamera.PiCamera() as camera:
                 camera.resolution = (640, 480)
@@ -68,10 +78,7 @@ def RecordCamera():
                 camera.wait_recording(60)
                 camera.stop_recording()
         finally:
-            print 'connection is closed'
-
-    connection.close()
-    client_socket.close()
+            print 'camera connection is closed'
 
 
 def WriteLog(message): # log data
@@ -80,20 +87,26 @@ def WriteLog(message): # log data
 
 
 if __name__ == "__main__":
-    GPIO.cleanup()
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(4, GPIO.OUT)   # Humidity/Temperature sensor is connected to gpio 4
+    try:
+        GPIO.cleanup()
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(10, GPIO.OUT)   # Humidity/Temperature sensor is connected to gpio 10
 
-    thCamera = threading.Thread(target=RecordCamera)
-    thCamera.start()
+        thCamera = threading.Thread(target=RecordCamera)
+        thCamera.start()
 
-    thHT = threading.Thread(target=GetHumid_Temp)
-    thHT.start()
+        thHT = threading.Thread(target=GetHumid_Temp)
+        thHT.start()
 
-    thLum = threading.Thread(target=GetLuminasity)
-    thLum.start()
+        thLum = threading.Thread(target=GetLuminasity)
+        thLum.start()
 
-    thData = threading.Thread(target=SendData)
-    thData.start()
+        thData = threading.Thread(target=SendData)
+        thData.start()
+    except KeyboardInterrupt:
+        runApp = False
+        connection.close()
+        client_socket.close()
+        os.system("sudo killall -9 python main.py")
 

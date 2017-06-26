@@ -240,7 +240,7 @@ class Sensor:
 def DHT22Data(pin):
 
    import time
-   import pigpio
+   import pigpio,os
 
    pi = pigpio.pi()
    s = Sensor(pi, pin, LED=16, power=8)
