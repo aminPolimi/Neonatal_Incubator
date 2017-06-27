@@ -131,11 +131,14 @@ class Ui_Form(object):
         self.plotHumid4.setLabel('bottom', 'time', 's')
         self.grdLay4.addWidget(self.plotHumid4, 4, 1)
 
-        self.plotLum4 = pg.PlotWidget()
-        self.plotLum4.setTitle('Luminosity')
-        self.plotLum4.setLabel('left', 'amplitude', 'V')
-        self.plotLum4.setLabel('bottom', 'time', 's')
-        self.grdLay4.addWidget(self.plotLum4, 4, 2)
+        # self.plotLum4 = pg.PlotWidget()
+        # self.plotLum4.setTitle('Luminosity')
+        # self.plotLum4.setLabel('left', 'amplitude', 'V')
+        # self.plotLum4.setLabel('bottom', 'time', 's')
+        # self.grdLay4.addWidget(self.plotLum4, 4, 2)
+
+        self.lblImage = QtGui.QLabel()
+        self.grdLay4.addWidget(self.lblImage,4,2)
 
 
     def retranslateUi(self, Form):

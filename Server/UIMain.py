@@ -1,7 +1,7 @@
 from PySide import QtGui, QtCore
 from MainGUI import Ui_Form
 from Data import Data
-import threading, socket, subprocess
+import threading, socket, subprocess, base64
 from Subscriber import *
 
 class clsMain(QtGui.QWidget):
@@ -68,6 +68,15 @@ class clsMain(QtGui.QWidget):
             self.ui.plotLum1.clear()
             self.ui.plotLum1.plot(Data.inc1["Lum"][0], Data.inc1["Lum"][1])
 
+
+            # #print len(Data.img)
+            # with open('img2.jpg', 'wb') as w:
+            #     w.write(Data.img)
+            #
+            # qimg = QtGui.QImage.fromData(Data.img)
+            # pixmap = QtGui.QPixmap.fromImage(qimg)
+            # self.ui.lblImage.setPixmap(pixmap)
+            # self.ui.lblImage.show()
 
         # self.ui.plotTemp2.clear()
         # self.ui.plotTemp2.plot(Data.inc2["Temp"][0], Data.inc2["Temp"][1])

@@ -1,6 +1,7 @@
-
+import io
 class Data():
     quLength = 15
+    img = ''
     # Queue with 15 items
     inc1 = {"Temp":[[],[]], "Humid":[[],[]],
             "Lum": [[], []]}
@@ -26,6 +27,7 @@ class Data():
             self.inc1["Temp"][1].append(int(jData["Temp"]))
             self.inc1["Humid"][1].append(int(jData["Humid"]))
             self.inc1["Lum"][1].append(int(jData["Lum"]))
+            # self.img = jData["image"]
         # elif data["incID"] == 2:
         #     if len(self.inc2["Temp"][1]) == self.quLength:
         #         del self.inc2["Temp"][1][0] , self.inc2["Humid"][1][0], self.inc2["Lum"][1][0]

@@ -1,11 +1,12 @@
 import threading, time, os
 from DHT22 import DHT22Data
 from Data import Data
-import socket, json
+import socket, json, io, base64
 import picamera
 import RPi.GPIO as GPIO
 from TSL2561 import tsl2561
 import paho.mqtt.client as mqtt
+from PIL import Image
 
 file = open("config","r")
 serverIP = file.readline().replace('server=','')
@@ -17,6 +18,7 @@ runApp = True
 client_socket = socket.socket()
 client_socket.connect((serverIP, 8001))
 connection = client_socket.makefile('wb')
+stream = io.BytesIO()
 
 def GetHumid_Temp():
     res = (1,1)
@@ -49,11 +51,19 @@ def SendData():
         message["Humid"] = clsData.humid
         message["Temp"] = clsData.temp
         message["Lum"] = clsData.lum
-        # i=i+1
-        # message['id']= i
+
+        # image = Image.open(stream.getvalue())
+        # out = io.BytesIO()
+        # # image.save(out, quality=20, optimize=True)
+        # image.save(stream, 'JPEG', dpi=[480, 360], quality=80)
+        # image.seek(0)
+        # #print len(out.getvalue())
+        # #print len(base64.b64decode(out.getvalue()))
+        aaa = base64.b64encode(stream.getvalue())
+
         try:
             client.publish("incubator1", str(json.dumps(message)));
-            #res = s.recv(16)
+            # client.publish("img1", aaa);
             print "send:  "+str(message)
         except:
             pass
@@ -84,6 +94,21 @@ def RecordCamera():
 def WriteLog(message): # log data
     with open('log', 'a+') as f:
         f.write(message + "\n")
+
+
+
+# def TakePicture():
+#     global stream
+#     while runApp:
+#         with picamera.PiCamera() as camera:
+#             camera.resolution = (480, 360)
+#             camera.start_preview()
+#             time.sleep(1)
+#             camera.capture(stream, format='jpeg', resize=(480, 360))
+#             # camera.capture('img.jpg', resize=(480, 360))
+#         # "Rewind" the stream to the beginning so we can read its content
+#         stream.seek(0)
+#         time.sleep(2)
 
 
 if __name__ == "__main__":

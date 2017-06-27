@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 from Data import *
-import time, json
+import time, json, base64
 
 # This is the Subscriber
 class subscriber():
@@ -8,15 +8,22 @@ class subscriber():
     def on_connect(client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
         client.subscribe("incubator1")
+        # client.subscribe("img1")
 
     def on_message(client, userdata, msg):
-        data = msg.payload.decode()
-        if len(data) > 1:
-            print str(data)
-            j = json.loads(data)
+        if len(msg.payload) > 1:
             ud = Data()
-            ud.updateData(j)
-        time.sleep(1)
+            if msg.topic!='img1':
+                data = msg.payload.decode()
+                j = json.loads(data)
+                ud.updateData(j)
+                print str(data)
+            else:
+                print 'enter img1'
+                data = msg.payload
+                Data.img = base64.b64decode(data)
+                print len(Data.img)
+            time.sleep(1)
 
     client = mqtt.Client()
     client.connect("0.0.0.0", 1883, 60)
