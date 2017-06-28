@@ -6,7 +6,7 @@ import picamera
 import RPi.GPIO as GPIO
 from TSL2561 import tsl2561
 import paho.mqtt.client as mqtt
-from PIL import Image
+#from PIL import Image
 
 file = open("config","r")
 serverIP = file.readline().replace('server=','')
@@ -18,6 +18,7 @@ runApp = True
 client_socket = socket.socket()
 client_socket.connect((serverIP, 8001))
 connection = client_socket.makefile('wb')
+
 stream = io.BytesIO()
 
 def GetHumid_Temp():
@@ -52,18 +53,19 @@ def SendData():
         message["Temp"] = clsData.temp
         message["Lum"] = clsData.lum
 
-        # image = Image.open(stream.getvalue())
-        # out = io.BytesIO()
-        # # image.save(out, quality=20, optimize=True)
-        # image.save(stream, 'JPEG', dpi=[480, 360], quality=80)
-        # image.seek(0)
-        # #print len(out.getvalue())
-        # #print len(base64.b64decode(out.getvalue()))
-        aaa = base64.b64encode(stream.getvalue())
+        ## image = Image.open(stream.getvalue())
+        ## out = io.BytesIO()
+        ## # image.save(out, quality=20, optimize=True)
+        ## image.save(stream, 'JPEG', dpi=[480, 360], quality=80)
+        ## image.seek(0)
+        ## #print len(out.getvalue())
+        ## #print len(base64.b64decode(out.getvalue()))
+
+        # stm64 = base64.b64encode(stream.getvalue())     #test sending image through MQTT
 
         try:
             client.publish("incubator1", str(json.dumps(message)));
-            # client.publish("img1", aaa);
+            # client.publish("img1", stm64);            #test sending image through MQTT
             print "send:  "+str(message)
         except:
             pass
@@ -97,18 +99,18 @@ def WriteLog(message): # log data
 
 
 
-# def TakePicture():
-#     global stream
-#     while runApp:
-#         with picamera.PiCamera() as camera:
-#             camera.resolution = (480, 360)
-#             camera.start_preview()
-#             time.sleep(1)
-#             camera.capture(stream, format='jpeg', resize=(480, 360))
-#             # camera.capture('img.jpg', resize=(480, 360))
-#         # "Rewind" the stream to the beginning so we can read its content
-#         stream.seek(0)
-#         time.sleep(2)
+def TakePicture():      #test sending image through MQTT
+    global stream
+    while runApp:
+        with picamera.PiCamera() as camera:
+            camera.resolution = (480, 360)
+            camera.start_preview()
+            time.sleep(1)
+            camera.capture(stream, format='jpeg', resize=(480, 360))
+            # camera.capture('img.jpg', resize=(480, 360))
+        # "Rewind" the stream to the beginning so we can read its content
+        stream.seek(0)
+        time.sleep(2)
 
 
 if __name__ == "__main__":
@@ -118,7 +120,7 @@ if __name__ == "__main__":
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(10, GPIO.OUT)   # Humidity/Temperature sensor is connected to gpio 10
 
-        thCamera = threading.Thread(target=RecordCamera)
+        thCamera = threading.Thread(target=RecordCamera)    # use 'TakePicture' instead of 'RecordCamera' to test MQTT
         thCamera.start()
 
         thHT = threading.Thread(target=GetHumid_Temp)
@@ -131,7 +133,8 @@ if __name__ == "__main__":
         thData.start()
     except KeyboardInterrupt:
         runApp = False
+        os.system("sudo killall -9 python main.py")
         connection.close()
         client_socket.close()
-        os.system("sudo killall -9 python main.py")
+
 

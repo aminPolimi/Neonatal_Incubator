@@ -8,7 +8,7 @@ class subscriber():
     def on_connect(client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
         client.subscribe("incubator1")
-        # client.subscribe("img1")
+        # client.subscribe("img1")          #test receiving image through MQTT
 
     def on_message(client, userdata, msg):
         if len(msg.payload) > 1:
@@ -18,7 +18,7 @@ class subscriber():
                 j = json.loads(data)
                 ud.updateData(j)
                 print str(data)
-            else:
+            else:       #test receiving image through MQTT
                 print 'enter img1'
                 data = msg.payload
                 Data.img = base64.b64decode(data)
